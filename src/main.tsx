@@ -40,7 +40,7 @@ const router = createRouter({ routeTree, context: { auth: null } },)
 const App = () => {
   const [auth]=useAuth();
   return (
-    <ThemeProvider defaultTheme='light' storageKey='vite-ui-theme'>
+    <ThemeProvider defaultTheme='dark' storageKey='vite-ui-theme'>
           <RouterProvider router={router} context={{auth:auth}}>
           </RouterProvider>
     </ThemeProvider>

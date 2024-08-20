@@ -1,5 +1,5 @@
 import { AuthState } from "@/types/state";
-import { atom, useAtom } from "jotai";
+import { useAtom } from "jotai";
 import { atomWithStorage } from "jotai/utils";
 
 const authAtom=atomWithStorage<AuthState>("auth",null);
