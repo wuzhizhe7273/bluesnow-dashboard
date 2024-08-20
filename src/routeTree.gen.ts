@@ -19,6 +19,18 @@ import { Route as DashboardImport } from './routes/_dashboard'
 
 const LoginLazyImport = createFileRoute('/login')()
 const DashboardIndexLazyImport = createFileRoute('/_dashboard/')()
+const DashboardArticlesIndexLazyImport = createFileRoute(
+  '/_dashboard/articles/',
+)()
+const DashboardArticlesTagsLazyImport = createFileRoute(
+  '/_dashboard/articles/tags',
+)()
+const DashboardArticlesEditorLazyImport = createFileRoute(
+  '/_dashboard/articles/editor',
+)()
+const DashboardArticlesCategoriesLazyImport = createFileRoute(
+  '/_dashboard/articles/categories',
+)()
 
 // Create/Update Routes
 
@@ -38,6 +50,38 @@ const DashboardIndexLazyRoute = DashboardIndexLazyImport.update({
 } as any).lazy(() =>
   import('./routes/_dashboard/index.lazy').then((d) => d.Route),
 )
+
+const DashboardArticlesIndexLazyRoute = DashboardArticlesIndexLazyImport.update(
+  {
+    path: '/articles/',
+    getParentRoute: () => DashboardRoute,
+  } as any,
+).lazy(() =>
+  import('./routes/_dashboard/articles/index.lazy').then((d) => d.Route),
+)
+
+const DashboardArticlesTagsLazyRoute = DashboardArticlesTagsLazyImport.update({
+  path: '/articles/tags',
+  getParentRoute: () => DashboardRoute,
+} as any).lazy(() =>
+  import('./routes/_dashboard/articles/tags.lazy').then((d) => d.Route),
+)
+
+const DashboardArticlesEditorLazyRoute =
+  DashboardArticlesEditorLazyImport.update({
+    path: '/articles/editor',
+    getParentRoute: () => DashboardRoute,
+  } as any).lazy(() =>
+    import('./routes/_dashboard/articles/editor.lazy').then((d) => d.Route),
+  )
+
+const DashboardArticlesCategoriesLazyRoute =
+  DashboardArticlesCategoriesLazyImport.update({
+    path: '/articles/categories',
+    getParentRoute: () => DashboardRoute,
+  } as any).lazy(() =>
+    import('./routes/_dashboard/articles/categories.lazy').then((d) => d.Route),
+  )
 
 // Populate the FileRoutesByPath interface
 
@@ -64,13 +108,47 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof DashboardIndexLazyImport
       parentRoute: typeof DashboardImport
     }
+    '/_dashboard/articles/categories': {
+      id: '/_dashboard/articles/categories'
+      path: '/articles/categories'
+      fullPath: '/articles/categories'
+      preLoaderRoute: typeof DashboardArticlesCategoriesLazyImport
+      parentRoute: typeof DashboardImport
+    }
+    '/_dashboard/articles/editor': {
+      id: '/_dashboard/articles/editor'
+      path: '/articles/editor'
+      fullPath: '/articles/editor'
+      preLoaderRoute: typeof DashboardArticlesEditorLazyImport
+      parentRoute: typeof DashboardImport
+    }
+    '/_dashboard/articles/tags': {
+      id: '/_dashboard/articles/tags'
+      path: '/articles/tags'
+      fullPath: '/articles/tags'
+      preLoaderRoute: typeof DashboardArticlesTagsLazyImport
+      parentRoute: typeof DashboardImport
+    }
+    '/_dashboard/articles/': {
+      id: '/_dashboard/articles/'
+      path: '/articles'
+      fullPath: '/articles'
+      preLoaderRoute: typeof DashboardArticlesIndexLazyImport
+      parentRoute: typeof DashboardImport
+    }
   }
 }
 
 // Create and export the route tree
 
 export const routeTree = rootRoute.addChildren({
-  DashboardRoute: DashboardRoute.addChildren({ DashboardIndexLazyRoute }),
+  DashboardRoute: DashboardRoute.addChildren({
+    DashboardIndexLazyRoute,
+    DashboardArticlesCategoriesLazyRoute,
+    DashboardArticlesEditorLazyRoute,
+    DashboardArticlesTagsLazyRoute,
+    DashboardArticlesIndexLazyRoute,
+  }),
   LoginLazyRoute,
 })
 
@@ -89,7 +167,11 @@ export const routeTree = rootRoute.addChildren({
     "/_dashboard": {
       "filePath": "_dashboard.tsx",
       "children": [
-        "/_dashboard/"
+        "/_dashboard/",
+        "/_dashboard/articles/categories",
+        "/_dashboard/articles/editor",
+        "/_dashboard/articles/tags",
+        "/_dashboard/articles/"
       ]
     },
     "/login": {
@@ -97,6 +179,22 @@ export const routeTree = rootRoute.addChildren({
     },
     "/_dashboard/": {
       "filePath": "_dashboard/index.lazy.tsx",
+      "parent": "/_dashboard"
+    },
+    "/_dashboard/articles/categories": {
+      "filePath": "_dashboard/articles/categories.lazy.tsx",
+      "parent": "/_dashboard"
+    },
+    "/_dashboard/articles/editor": {
+      "filePath": "_dashboard/articles/editor.lazy.tsx",
+      "parent": "/_dashboard"
+    },
+    "/_dashboard/articles/tags": {
+      "filePath": "_dashboard/articles/tags.lazy.tsx",
+      "parent": "/_dashboard"
+    },
+    "/_dashboard/articles/": {
+      "filePath": "_dashboard/articles/index.lazy.tsx",
       "parent": "/_dashboard"
     }
   }
